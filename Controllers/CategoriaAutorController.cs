@@ -146,5 +146,57 @@ namespace AppPeliculas.Controllers
 
             }
         }
+
+        public IActionResult Eliminar(int idautorcategoria)
+        {
+
+
+            // var datos = _context.CategoriaAutors.Where(f=>f.IdCategoriaAutor==idautorcategoria).Include(m => m.IdCategoriaNavigation).Include(m => m.IdAutorNavigation);
+            CategoriaAutorVM categoriaautorvm = new CategoriaAutorVM()
+            {
+                categoriaautor = new CategoriaAutor(),
+
+                CategoriaLista = _context.Categoria.Select(i => new SelectListItem
+                {
+                    Text = i.Descripcion,
+                    Value = i.IdCategoria.ToString()
+                }),
+
+                AutorLista = _context.Autors.Select(a => new SelectListItem
+                {
+                    Text = a.Nombre + " " + a.APaterno + " " + a.AMaterno,
+                    Value = a.IdAutor.ToString()
+                })
+
+            };
+
+            categoriaautorvm.categoriaautor = _context.CategoriaAutors.Find(idautorcategoria);
+            return View(categoriaautorvm);
+
+
+
+            //return View(_context.CategoriaAutors.Find(idautorcategoria));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Eliminar(CategoriaAutorVM modelo)
+        {
+
+            CategoriaAutor categoriautor = new CategoriaAutor()
+            {
+                IdCategoriaAutor = modelo.categoriaautor.IdCategoriaAutor
+
+            };
+
+            _context.CategoriaAutors.Remove(categoriautor);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+
+          
+
+
+        }
     }
 }
