@@ -1,19 +1,14 @@
-﻿namespace AppPeliculas.Models.ViewModels
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace AppPeliculas.Models.ViewModels
 {
     public class CategoriaAutorVM
     {
-        public int? idcategoria { get; set; }
 
-        public int? idautor { get; set; }
+        public CategoriaAutor categoriaautor { get; set; }
 
-        public string? descripcioncategoria { get; set; }
+        public IEnumerable<SelectListItem> CategoriaLista { get; set; }
 
-        public string? nombrecompleto { get; set; }
-
-
-
-
-
-
+        public IEnumerable<SelectListItem> AutorLista { get; set; }
     }
 }

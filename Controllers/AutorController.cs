@@ -91,9 +91,20 @@ namespace AppPeliculas.Controllers
         [HttpPost]
         public IActionResult Eliminar (Autor modelo)
         {
-            _context.Autors.Remove(modelo);
-            _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Autors.Remove(modelo);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+
+            }
+            catch
+            {
+                TempData["error202"] = "No se puede eliminar el autor ya que tiene asignado una pelicula o tiene asignado una union Categoria Autor";
+                return View();
+            }
+           
+           
 
         }
     }

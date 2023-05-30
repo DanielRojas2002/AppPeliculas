@@ -1,6 +1,8 @@
 ﻿using AppPeliculas.Models;
 using Microsoft.AspNetCore.Mvc;
 using AppPeliculas.Models;
+using System.Linq.Expressions;
+
 namespace AppPeliculas.Controllers
 {
     public class CategoriaController : Controller
@@ -94,9 +96,18 @@ namespace AppPeliculas.Controllers
         [HttpPost]
         public IActionResult Eliminar(Categorium modelo)
         {
-            _context.Categoria.Remove(modelo);
-            _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Categoria.Remove(modelo);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+           
+
+            catch{
+                TempData["error202"] = "No se puede eliminar la categoria ya que tiene asignado una pelicula o tiene asignado una union Categoria Autor";
+                return View();
+            }
         }
     }
 }
