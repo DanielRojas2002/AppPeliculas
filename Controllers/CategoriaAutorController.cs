@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace AppPeliculas.Controllers
 {
@@ -87,31 +88,14 @@ namespace AppPeliculas.Controllers
         }
 
         [HttpPost]
-        public  IActionResult Upsert(CategoriaAutorVM modelo)
+        public IActionResult Upsert(CategoriaAutorVM modelo)
         {
             if (modelo.categoriaautor.IdCategoriaAutor == 0)
             {
 
                 // crear 
 
-              
-
-                var coincidencia = from CategoriaAutor in _context.CategoriaAutors
-                                   where CategoriaAutor.IdAutor == modelo.categoriaautor.IdAutor
-                                   & CategoriaAutor.IdCategoria == modelo.categoriaautor.IdCategoria
-
-                                   select CategoriaAutor.IdAutor;
-
-
-                int validacion = 0;
-                foreach (var persona in coincidencia)
-                {
-                    validacion = 1;
-                }
-
-
-
-                if (validacion==0)
+                try
                 {
                     CategoriaAutor ca = new CategoriaAutor()
                     {
@@ -124,36 +108,42 @@ namespace AppPeliculas.Controllers
                     _context.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
-                else
+                catch
                 {
-                    TempData["error102"] = "Ya cuenta con esta Asignacion";
+                    //string nombrecompleto = modelo.categoriaautor.IdAutorNavigation.Nombre + " " + modelo.categoriaautor.IdAutorNavigation.APaterno + " " + modelo.categoriaautor.IdAutorNavigation.AMaterno;
+                    //string descripcioncategoria= modelo.categoriaautor.IdCategoriaNavigation.Descripcion; 
+                    TempData["error102"] = "Ya cuenta con esta Asingacion:" ;
                     return View(modelo);
                 }
+               
+              
               
               
             }
             else
             {
                 // editar
-
-                var coincidencia = _context.CategoriaAutors.Find(from CategoriaAutor in _context.CategoriaAutors
-                                                                 where CategoriaAutor.IdAutor == modelo.categoriaautor.IdAutor 
-                                                                 & CategoriaAutor.IdCategoria== modelo.categoriaautor.IdCategoria
-                                                                 select CategoriaAutor.IdAutor);
-
-            // no existe
-                CategoriaAutor ca = new CategoriaAutor()
+                try
                 {
-                    IdCategoriaAutor = modelo.categoriaautor.IdCategoriaAutor,
-                    IdAutor = modelo.categoriaautor.IdAutor,
-                    IdCategoria = modelo.categoriaautor.IdCategoria
-                };
+                    CategoriaAutor ca = new CategoriaAutor()
+                    {
+                        IdCategoriaAutor = modelo.categoriaautor.IdCategoriaAutor,
+                        IdAutor = modelo.categoriaautor.IdAutor,
+                        IdCategoria = modelo.categoriaautor.IdCategoria
+                    };
 
-                _context.CategoriaAutors.Update(ca);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                    _context.CategoriaAutors.Update(ca);
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    TempData["error102"] = "Ya cuenta con esta Asingacion:";
+                    return View(modelo);
+                }
               
-               
+
+
             }
         }
     }
