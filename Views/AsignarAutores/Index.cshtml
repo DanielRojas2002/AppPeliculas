@@ -12,7 +12,8 @@
 <div class="d-flex justify-content-around ">
     <h1>Asignar Autores</h1>
 
-    <a asp-action="Upsert" asp-controller="AsignarAutores"  class="btn btn-success m-0"> Agregar Autor</a>
+    <a asp-action="Upsert" asp-controller="AsignarAutores"   class="btn btn-success m-0"> Agregar Autor</a>
+
 </div>
 
 <table class="table ">
@@ -70,10 +71,13 @@
 
            
             <td class="d-flex justify-content-around ">
-                @*<a href="@Url.Action("Upsert", "AsignarAutores", new { idpeliculaautor = peliculaautor.IdPeliculaAutor, idpelicula = peliculaautor.IdPeliculaAutor })" class="btn btn-primary">Editar</a>*@
 
-                <a asp-action="Upsert" asp-route-idpeliculaautor="@peliculaautor.IdPeliculaAutor" asp-route-idpeli="@peliculaautor.IdPelicula" class="btn btn-primary">Editar</a>
-                <a asp-action="Eliminar" asp-route-idpeliculaautor="@peliculaautor.IdPeliculaAutor" asp-route-idpeli="@peliculaautor.IdPelicula" class="btn btn-danger">Eliminar</a>
+                
+                @*<a asp-action="Upsert" asp-route-idpeliculaautor="@peliculaautor.IdPeliculaAutor" asp-route-idpelicula="@peliculaautor.IdPelicula" class="btn btn-primary">Editar</a>*@
+                <a asp-action="Upsert" asp-controller="AsignarAutores" asp-route-idpeliculaautor="@peliculaautor.IdPeliculaAutor" asp-route-idpelicula="@peliculaautor.IdPelicula" class="btn btn-primary">Editar</a>
+
+
+                <a asp-action="Eliminar" asp-route-idpeliculaautor="@peliculaautor.IdPeliculaAutor" asp-route-idpelicula="@peliculaautor.IdPelicula" class="btn btn-danger">Eliminar</a>
             </td>
 
 

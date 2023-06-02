@@ -3,6 +3,8 @@ using AppPeliculas.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
 
 namespace AppPeliculas.Controllers
 {
@@ -27,25 +29,37 @@ namespace AppPeliculas.Controllers
 
         }
 
-        public IActionResult Upsert ( int? idpeliculaautor, int? idpelicula)
+        public IActionResult Upsert ( int? idpeliculaautor, int idpelicula)
         {
+
+            var idcategoria = (from pelicula in _context.Peliculas
+                               where pelicula.IdPelicula == idpelicula
+                               select pelicula.IdCategoria).SingleOrDefault();
+
+
             PeliculaAutorVM peliculaautor = new PeliculaAutorVM()
             {
                 pelicula = new Pelicula(),
                 peliculaautor= new PeliculaAutor(),
-                ListaAutores = _context.Autors.Select(m => new SelectListItem
+                ListaAutores = _context.CategoriaAutors.Where(m => m.IdCategoria == idcategoria).Select(m => new SelectListItem
                 {
-                    Text = m.Nombre + " " + m.APaterno + " " + m.AMaterno,
-                    Value = m.IdAutor.ToString()
+                    Text = m.IdAutorNavigation.Nombre + " " + m.IdAutorNavigation.APaterno + " " + m.IdAutorNavigation.AMaterno,
+                    Value = m.IdAutorNavigation.IdAutor.ToString()
                 })
-            }; 
+            };
+
+
+    
+
+
+
 
             if (idpeliculaautor == null)
             {
                 // crear asignar autor
               
                 peliculaautor.peliculaautor.IdPeliculaAutor = 0;
-                //peliculaautor.peliculaautor.IdPelicula = idpelicula;
+                peliculaautor.peliculaautor.IdPelicula = idpelicula;
 
 
                 return View(peliculaautor);
@@ -130,6 +144,12 @@ namespace AppPeliculas.Controllers
             _context.PeliculaAutors.Remove(peliculaautor);
             _context.SaveChanges();
              return RedirectToAction("Index", "AsignarAutores", new { idpelicula = modelo.peliculaautor.IdPelicula });
+
+        }
+
+        public IActionResult Regresar(int idpelicula)
+        {
+            return RedirectToAction("Index", "AsignarAutores", new { idpelicula = idpelicula });
 
         }
     }
