@@ -71,11 +71,7 @@ namespace AppPeliculas.Controllers
         {
             if (modelo.pelicula.IdPelicula==0)
             {
-                // crear
-
-                //string horaFormateada = modelo.pelicula.Duracion.HasValue
-                //    ? modelo.pelicula.Duracion.Value.ToString("HH:mm")
-                //    : string.Empty;
+               
 
 
                 Pelicula pelicula = new Pelicula()
@@ -97,8 +93,71 @@ namespace AppPeliculas.Controllers
             else
             {
                 //editar
+
+                Pelicula pelicula = new Pelicula()
+                {
+                    IdPelicula = modelo.pelicula.IdPelicula,
+                    IdCategoria = modelo.pelicula.IdCategoria,
+                    IdEstatusPelicula = modelo.pelicula.IdEstatusPelicula,
+                    Titulo = modelo.pelicula.Titulo.ToUpper(),
+                    Descripcion = modelo.pelicula.Descripcion.ToLower(),
+                    Duracion = modelo.pelicula.Duracion,
+                    FechaRegistro=modelo.pelicula.FechaRegistro
+                    
+
+                };
+
+                _context.Peliculas.Update(pelicula);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
             }
-            return View();
+           
         }
+
+        public IActionResult Eliminar (int? idpelicula)
+        {
+            PeliculaVM peliculas = new PeliculaVM()
+            {
+                pelicula = new Pelicula(),
+
+                ListaCateogoria = _context.Categoria.Select(m => new SelectListItem
+                {
+                    Text = m.Descripcion,
+                    Value = m.IdCategoria.ToString()
+                }),
+
+                ListaEstatus=_context.EstatusPeliculas.Select(s=> new SelectListItem
+                {
+                    Text=s.Descripcion,
+                    Value=s.IdEstatusPelicula.ToString()
+                })
+            };
+
+            peliculas.pelicula = _context.Peliculas.Find(idpelicula);
+
+            return View(peliculas);
+        }
+
+        [HttpPost]
+        public IActionResult Eliminar (PeliculaVM modelo)
+        {
+            Pelicula pelicula = new Pelicula()
+            {
+                IdPelicula=modelo.pelicula.IdPelicula
+            };
+
+            _context.Peliculas.Remove(pelicula);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+            
+        }
+
+        public IActionResult AsignarAutores(int idpelicula)
+        {
+            return RedirectToAction("Index", "AsignarAutores", new { idpelicula = idpelicula });
+
+        }
+
+
     }
 }

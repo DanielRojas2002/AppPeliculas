@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+
+
+@model List<PeliculaAutor>
+
+<div class="d-flex justify-content-around ">
+    <h1>Asignar Autores</h1>
+
+    <a asp-action="Upsert" asp-controller="AsignarAutores"  class="btn btn-success m-0"> Agregar Autor</a>
+</div>
+
+<table class="table ">
+    <tr>
+        <th>
+            Id Pelicula
+        </th>
+
+        <th>
+            Pelicula
+        </th>
+
+        <th>
+            Nombre
+        </th>
+
+        <th>
+            Apellido Paterno
+        </th>
+
+        <th>
+            Apellido Materno
+        </th>
+
+        <th class="text-center">
+            Acciones
+        </th>
+
+
+    </tr>
+
+    @foreach (var peliculaautor in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(m=>peliculaautor.IdPelicula)
+               
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>peliculaautor.IdPeliculaNavigation.Titulo  )
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>peliculaautor.IdAutorNavigation.Nombre  )
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>peliculaautor.IdAutorNavigation.APaterno  )
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>peliculaautor.IdAutorNavigation.AMaterno  )
+            </td>
+
+           
+            <td class="d-flex justify-content-around ">
+                @*<a href="@Url.Action("Upsert", "AsignarAutores", new { idpeliculaautor = peliculaautor.IdPeliculaAutor, idpelicula = peliculaautor.IdPeliculaAutor })" class="btn btn-primary">Editar</a>*@
+
+                <a asp-action="Upsert" asp-route-idpeliculaautor="@peliculaautor.IdPeliculaAutor" asp-route-idpeli="@peliculaautor.IdPelicula" class="btn btn-primary">Editar</a>
+                <a asp-action="Eliminar" asp-route-idpeliculaautor="@peliculaautor.IdPeliculaAutor" asp-route-idpeli="@peliculaautor.IdPelicula" class="btn btn-danger">Eliminar</a>
+            </td>
+
+
+        </tr>
+
+    }
+</table>

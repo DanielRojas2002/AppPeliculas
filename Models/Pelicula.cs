@@ -15,9 +15,9 @@ public partial class Pelicula
 
     public string Descripcion { get; set; } = null!;
 
-    public DateTime FechaRegistro { get; set; }
+    public DateTime? FechaRegistro { get; set; }
 
-    public TimeSpan? Duracion { get; set; }
+    public TimeSpan Duracion { get; set; }
 
     public int? Stock { get; set; }
 
