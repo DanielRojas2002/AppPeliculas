@@ -141,15 +141,31 @@ namespace AppPeliculas.Controllers
         [HttpPost]
         public IActionResult Eliminar (PeliculaVM modelo)
         {
-            Pelicula pelicula = new Pelicula()
+            try
             {
-                IdPelicula=modelo.pelicula.IdPelicula
-            };
+                Pelicula pelicula = new Pelicula()
+                {
+                    IdPelicula = modelo.pelicula.IdPelicula
+                };
 
-            _context.Peliculas.Remove(pelicula);
-            _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
-            
+                _context.Peliculas.Remove(pelicula);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Ocurrió un error al eliminar la película
+                var errorMessage = "No se puede eliminar esta pelicula antes de eliminar todas las asignaciones de autores";
+
+                var model = new ErrorViewModel
+                {
+                    ErrorMessage = errorMessage
+                };
+
+                return View("Error", model);
+            }
+
+
         }
 
         public IActionResult AsignarAutores(int idpelicula)
