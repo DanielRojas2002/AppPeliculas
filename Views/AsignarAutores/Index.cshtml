@@ -12,8 +12,10 @@
 <div class="d-flex justify-content-around ">
     <h1>Asignar Autores</h1>
 
-    <a asp-action="Upsert" asp-controller="AsignarAutores"   class="btn btn-success m-0"> Agregar Autor</a>
+    
+  
 
+    <a asp-action="Upsert" asp-controller="AsignarAutores" asp-route-idpelicula="@TempData["idpelicula"]" class="btn btn-success m-0">Agregar Autor</a>
 </div>
 
 <table class="table ">

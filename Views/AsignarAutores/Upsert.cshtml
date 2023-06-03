@@ -34,7 +34,7 @@ else
 
             <div class="form-group mt-3">
               
-                <input asp-for="peliculaautor.IdPelicula" class="form-control"  />
+                <input asp-for="peliculaautor.IdPelicula" class="form-control" hidden />
 
                 <label asp-for="autor.IdAutor" class="control-label"></label>
                 <select asp-for="autor.IdAutor" asp-items="@Model.ListaAutores" class="form-select">

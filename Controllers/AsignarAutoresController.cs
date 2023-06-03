@@ -25,6 +25,7 @@ namespace AppPeliculas.Controllers
             
             var datos = _context.PeliculaAutors.Include(m => m.IdPeliculaNavigation).Include(m => m.IdAutorNavigation).Where
                 (m=>m.IdPelicula== idpelicula);
+            TempData["idpelicula"] = idpelicula;
             return View(datos.ToList());
 
         }
