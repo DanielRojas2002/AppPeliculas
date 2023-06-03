@@ -102,12 +102,23 @@ namespace AppPeliculas.Controllers
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-           
+            catch (Exception ex)
+            {
+                // Ocurrió un error al eliminar la película
+                var errorMessage = "No se puede eliminar la categoria ya que tiene asignado una pelicula o tiene asignado una union Categoria Autor";
 
-            catch{
-                TempData["error202"] = "No se puede eliminar la categoria ya que tiene asignado una pelicula o tiene asignado una union Categoria Autor";
-                return View();
+                var model = new ErrorViewModel
+                {
+                    ErrorMessage = errorMessage,
+                    asp_action = "Index",
+                    asp_controller = "Categoria"
+
+                };
+
+                return View("Error", model);
             }
+
+        
         }
     }
 }

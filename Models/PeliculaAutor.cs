@@ -9,9 +9,9 @@ public partial class PeliculaAutor
 
     public int IdPelicula { get; set; }
 
-    public int IdAutor { get; set; }
+    public int IdCategoriaAutor { get; set; }
 
-    public virtual Autor IdAutorNavigation { get; set; } = null!;
+    public virtual CategoriaAutor IdCategoriaAutorNavigation { get; set; } = null!;
 
     public virtual Pelicula IdPeliculaNavigation { get; set; } = null!;
 }

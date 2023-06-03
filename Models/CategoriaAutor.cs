@@ -14,4 +14,6 @@ public partial class CategoriaAutor
     public virtual Autor IdAutorNavigation { get; set; } = null!;
 
     public virtual Categorium IdCategoriaNavigation { get; set; } = null!;
+
+    public virtual ICollection<PeliculaAutor> PeliculaAutors { get; set; } = new List<PeliculaAutor>();
 }

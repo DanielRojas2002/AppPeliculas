@@ -23,7 +23,7 @@ namespace AppPeliculas.Controllers
         {
            
             
-            var datos = _context.PeliculaAutors.Include(m => m.IdPeliculaNavigation).Include(m => m.IdAutorNavigation).Where
+            var datos = _context.PeliculaAutors.Include(m => m.IdPeliculaNavigation).Include(m => m.IdCategoriaAutorNavigation.IdAutorNavigation).Where
                 (m=>m.IdPelicula== idpelicula);
             TempData["idpelicula"] = idpelicula;
             return View(datos.ToList());
@@ -45,7 +45,7 @@ namespace AppPeliculas.Controllers
                 ListaAutores = _context.CategoriaAutors.Where(m => m.IdCategoria == idcategoria).Select(m => new SelectListItem
                 {
                     Text = m.IdAutorNavigation.Nombre + " " + m.IdAutorNavigation.APaterno + " " + m.IdAutorNavigation.AMaterno,
-                    Value = m.IdAutorNavigation.IdAutor.ToString()
+                    Value = m.IdCategoriaAutor.ToString()
                 })
             };
 
@@ -85,17 +85,36 @@ namespace AppPeliculas.Controllers
             if (modelo.peliculaautor.IdPeliculaAutor==0)
             {
                 // crear
-
-                PeliculaAutor peliculaautor = new PeliculaAutor()
+                try
                 {
-                    IdAutor = modelo.autor.IdAutor,
-                    IdPelicula = modelo.peliculaautor.IdPelicula
-                   
-                };
+                    PeliculaAutor peliculaautor = new PeliculaAutor()
+                    {
+                        IdCategoriaAutor = modelo.peliculaautor.IdCategoriaAutor,
+                        IdPelicula = modelo.peliculaautor.IdPelicula
 
-                _context.PeliculaAutors.Add(peliculaautor);
-                _context.SaveChanges();
-                return RedirectToAction("Index", "AsignarAutores", new { idpelicula = modelo.peliculaautor.IdPelicula });
+                    };
+
+                    _context.PeliculaAutors.Add(peliculaautor);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index", "AsignarAutores", new { idpelicula = modelo.peliculaautor.IdPelicula });
+                }
+                catch (Exception ex)
+                {
+                    // Ocurrió un error al eliminar la película
+                    var errorMessage = "No se puede duplicar esta asignacion";
+
+                    var model = new ErrorViewModel
+                    {
+                        ErrorMessage = errorMessage,
+                        asp_action = "Index",
+                        asp_controller = "AsignarAutores",
+                        parametro = modelo.peliculaautor.IdPelicula
+
+                    };
+
+                    return View("Error", model);
+                }
+
             }
             else
             {
@@ -105,7 +124,7 @@ namespace AppPeliculas.Controllers
                 {
                     IdPeliculaAutor=modelo.peliculaautor.IdPeliculaAutor,
                     IdPelicula = modelo.peliculaautor.IdPelicula,
-                    IdAutor = modelo.autor.IdAutor
+                    IdCategoriaAutor = modelo.peliculaautor.IdCategoriaAutor
                 };
 
                 _context.PeliculaAutors.Update(peliculaautor);
@@ -136,6 +155,7 @@ namespace AppPeliculas.Controllers
         [HttpPost]
         public IActionResult Eliminar (PeliculaAutorVM modelo)
         {
+            
             PeliculaAutor peliculaautor = new PeliculaAutor()
             {
                 IdPeliculaAutor = modelo.peliculaautor.IdPeliculaAutor
@@ -144,7 +164,10 @@ namespace AppPeliculas.Controllers
 
             _context.PeliculaAutors.Remove(peliculaautor);
             _context.SaveChanges();
-             return RedirectToAction("Index", "AsignarAutores", new { idpelicula = modelo.peliculaautor.IdPelicula });
+            return RedirectToAction("Index", "AsignarAutores", new { idpelicula = modelo.peliculaautor.IdPelicula });
+            
+          
+            
 
         }
 

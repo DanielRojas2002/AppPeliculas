@@ -14,6 +14,4 @@ public partial class Autor
     public string AMaterno { get; set; } = null!;
 
     public virtual ICollection<CategoriaAutor> CategoriaAutors { get; set; } = new List<CategoriaAutor>();
-
-    public virtual ICollection<PeliculaAutor> PeliculaAutors { get; set; } = new List<PeliculaAutor>();
 }

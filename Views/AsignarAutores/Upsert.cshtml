@@ -36,10 +36,10 @@ else
               
                 <input asp-for="peliculaautor.IdPelicula" class="form-control" hidden />
 
-                <label asp-for="autor.IdAutor" class="control-label"></label>
-                <select asp-for="autor.IdAutor" asp-items="@Model.ListaAutores" class="form-select">
+                <label asp-for="peliculaautor.IdCategoriaAutor" class="control-label"></label>
+                <select asp-for="peliculaautor.IdCategoriaAutor" asp-items="@Model.ListaAutores" class="form-select">
                 </select>
-                <span asp-validation-for="autor.IdAutor" class="text-danger"></span>
+                <span asp-validation-for="peliculaautor.IdCategoriaAutor" class="text-danger"></span>
             </div>
 
 

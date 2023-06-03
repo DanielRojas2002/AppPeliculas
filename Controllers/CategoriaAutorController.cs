@@ -183,16 +183,36 @@ namespace AppPeliculas.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Eliminar(CategoriaAutorVM modelo)
         {
-
-            CategoriaAutor categoriautor = new CategoriaAutor()
+            try
             {
-                IdCategoriaAutor = modelo.categoriaautor.IdCategoriaAutor
+                CategoriaAutor categoriautor = new CategoriaAutor()
+                {
+                    IdCategoriaAutor = modelo.categoriaautor.IdCategoriaAutor
 
-            };
+                };
 
-            _context.CategoriaAutors.Remove(categoriautor);
-            _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
+                _context.CategoriaAutors.Remove(categoriautor);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Ocurrió un error al eliminar la película
+                var errorMessage = "No se puede eliminar esta asignacion ya que esta siendo utilizada";
+
+                var model = new ErrorViewModel
+                {
+                    ErrorMessage = errorMessage,
+                    asp_action = "Index",
+                    asp_controller = "CategoriaAutor"
+                  
+
+
+                };
+
+                return View("Error", model);
+            }
+           
 
           
 

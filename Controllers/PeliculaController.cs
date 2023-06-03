@@ -159,7 +159,11 @@ namespace AppPeliculas.Controllers
 
                 var model = new ErrorViewModel
                 {
-                    ErrorMessage = errorMessage
+                    ErrorMessage = errorMessage,
+                    asp_action="Index",
+                    asp_controller="Pelicula"
+                    
+
                 };
 
                 return View("Error", model);

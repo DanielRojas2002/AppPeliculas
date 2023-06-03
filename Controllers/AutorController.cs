@@ -98,13 +98,23 @@ namespace AppPeliculas.Controllers
                 return RedirectToAction(nameof(Index));
 
             }
-            catch
+            catch (Exception ex)
             {
-                TempData["error202"] = "No se puede eliminar el autor ya que tiene asignado una pelicula o tiene asignado una union Categoria Autor";
-                return View();
+                // Ocurrió un error al eliminar la película
+                var errorMessage = "No se puede eliminar el autor ya que tiene asignado una pelicula o tiene asignado una union Categoria Autor";
+
+                var model = new ErrorViewModel
+                {
+                    ErrorMessage = errorMessage,
+                    asp_action = "Index",
+                    asp_controller = "Autor"
+
+                };
+
+                return View("Error", model);
             }
-           
-           
+
+
 
         }
     }
