@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "EliminarTodos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+@model List<PeliculaAutor>
+
+<!-- Otras secciones de la vista -->
+
+<h2>Autores a eliminar:</h2>
+<table class="table">
+    <tr>
+        <th>
+            Nombre
+        </th>
+
+        <th>
+            Apellido Paterno
+        </th>
+
+        <th>
+            Apellido Materno
+        </th>
+    </tr>
+
+    @foreach (var autor in Model)
+    {
+        <tr>
+            <td>
+                @autor.IdCategoriaAutorNavigation.IdAutorNavigation.Nombre
+            </td>
+
+
+            <td>
+                @autor.IdCategoriaAutorNavigation.IdAutorNavigation.APaterno
+            </td>
+
+            <td>
+                @autor.IdCategoriaAutorNavigation.IdAutorNavigation.AMaterno
+            </td>
+
+        </tr>
+
+    }
+
+</table>
+
+   
+
+
+<form method="post" asp-action="EliminarTodos">
+    <input type="hidden" name="idpelicula" value="@TempData["idpelicula"]" />
+    <button type="submit" class="btn btn-danger">Eliminar Autores</button>
+</form>
+
+<!-- Otras secciones de la vista -->
+
+

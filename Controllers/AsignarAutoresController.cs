@@ -176,5 +176,41 @@ namespace AppPeliculas.Controllers
             return RedirectToAction("Index", "AsignarAutores", new { idpelicula = idpelicula });
 
         }
+     
+        public IActionResult EliminarTodos(int idpelicula)
+        {
+           
+            var datos = _context.PeliculaAutors.Include(m => m.IdPeliculaNavigation).Include(m => m.IdCategoriaAutorNavigation.IdAutorNavigation).Where
+               (m => m.IdPelicula == idpelicula);
+
+            TempData["idpelicula"] = idpelicula;
+
+            return View(datos.ToList());
+        }
+
+        [HttpPost]
+        public IActionResult EliminarTodos(int? idpelicula)
+        {
+            try
+            {
+                // Obtén los registros de la tabla PeliculaAutor para la película específica
+                var registros = _context.PeliculaAutors.Where(pa => pa.IdPelicula == idpelicula);
+
+                // Elimina los registros
+                _context.PeliculaAutors.RemoveRange(registros);
+                _context.SaveChanges();
+
+                // Redirige a la acción Detalles pasando el ID de la película
+                return RedirectToAction(nameof(Index), new { idpelicula = idpelicula });
+            }
+            catch (Exception ex)
+            {
+                // Ocurrió un error al eliminar los autores
+                var errorMessage = "No se pueden eliminar los autores en este momento. Por favor, inténtalo nuevamente más tarde.";
+                var model = new ErrorViewModel { ErrorMessage = errorMessage };
+                return View("Error", model);
+            }
+
+        }
     }
 }
