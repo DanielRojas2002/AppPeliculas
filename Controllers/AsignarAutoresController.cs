@@ -119,17 +119,36 @@ namespace AppPeliculas.Controllers
             else
             {
                 // editar
-
-                PeliculaAutor peliculaautor = new PeliculaAutor()
+                try
                 {
-                    IdPeliculaAutor=modelo.peliculaautor.IdPeliculaAutor,
-                    IdPelicula = modelo.peliculaautor.IdPelicula,
-                    IdCategoriaAutor = modelo.peliculaautor.IdCategoriaAutor
-                };
+                    PeliculaAutor peliculaautor = new PeliculaAutor()
+                    {
+                        IdPeliculaAutor = modelo.peliculaautor.IdPeliculaAutor,
+                        IdPelicula = modelo.peliculaautor.IdPelicula,
+                        IdCategoriaAutor = modelo.peliculaautor.IdCategoriaAutor
+                    };
 
-                _context.PeliculaAutors.Update(peliculaautor);
-                _context.SaveChanges();
-                return RedirectToAction("Index", "AsignarAutores", new { idpelicula = modelo.peliculaautor.IdPelicula });
+                    _context.PeliculaAutors.Update(peliculaautor);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index", "AsignarAutores", new { idpelicula = modelo.peliculaautor.IdPelicula });
+                }
+                catch (Exception ex)
+                {
+                    // Ocurrió un error al eliminar la película
+                    var errorMessage = "No se puede duplicar esta asignacion";
+
+                    var model = new ErrorViewModel
+                    {
+                        ErrorMessage = errorMessage,
+                        asp_action = "Index",
+                        asp_controller = "AsignarAutores",
+                        parametro = modelo.peliculaautor.IdPelicula
+
+                    };
+
+                    return View("Error", model);
+                }
+              
             }
             
         }
