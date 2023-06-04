@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<Almacen>
+
+<div class="d-flex justify-content-around ">
+    <h1>Almacen</h1>
+
+
+
+
+    <a asp-action="AgregarStock" asp-controller="Almacen" asp-route-idpelicula="@TempData["idpelicula"]" class="btn btn-success m-0">Agregar Stock</a>
+</div>
+
+<table class="table ">
+    <tr>
+        <th>
+            Id Stock
+        </th>
+
+        <th>
+            Pelicula
+        </th>
+
+        <th>
+            Stock Agregado
+        </th>
+
+        <th>
+            Fecha Registro
+        </th>
+
+        <th>
+           Tipo Entrada
+        </th>
+
+       
+
+        <th class="text-center">
+            Acciones
+        </th>
+
+
+    </tr>
+
+    @foreach (var almacen in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(m=>almacen.IdAlmacen)
+
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>almacen.IdPeliculaNavigation.Titulo  )
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>almacen.Cantidad  )
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>almacen.FechaRegistro )
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>almacen.IdTipoEntradaNavigation.Descripcion  )
+            </td>
+
+
+            <td class="d-flex justify-content-around ">     
+                <a asp-action="VerDetalle" asp-controller="Almacen" asp-route-idalmacen="@almacen.IdAlmacen"  class="btn btn-primary">Ver Detalle</a>  
+            </td>
+
+
+        </tr>
+
+    }
+</table>
+
+
+

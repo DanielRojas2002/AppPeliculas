@@ -178,6 +178,11 @@ namespace AppPeliculas.Controllers
 
         }
 
+        public IActionResult AgregarStock(int idpelicula)
+        {
+            return RedirectToAction("Index", "Almacen", new { idpelicula = idpelicula });
+        }
+
 
     }
 }

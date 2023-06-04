@@ -55,6 +55,7 @@
 
 <form method="post" asp-action="EliminarTodos">
     <input type="hidden" name="idpelicula" value="@TempData["idpelicula"]" />
+    <a asp-action="Regresar" asp-route-idpelicula="@TempData["idpelicula"]" class="btn btn-primary">Regresar</a>
     <button type="submit" class="btn btn-danger">Eliminar Autores</button>
 </form>
 

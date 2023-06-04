@@ -13,6 +13,8 @@ public partial class Almacen
 
     public DateTime FechaRegistro { get; set; }
 
+    public int Cantidad { get; set; }
+
     public virtual Pelicula IdPeliculaNavigation { get; set; } = null!;
 
     public virtual Tipoentradum IdTipoEntradaNavigation { get; set; } = null!;
