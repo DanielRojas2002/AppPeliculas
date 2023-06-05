@@ -108,17 +108,27 @@ namespace AppPeliculas.Controllers
                     _context.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
-                catch
+                catch (Exception ex)
                 {
-                    //string nombrecompleto = modelo.categoriaautor.IdAutorNavigation.Nombre + " " + modelo.categoriaautor.IdAutorNavigation.APaterno + " " + modelo.categoriaautor.IdAutorNavigation.AMaterno;
-                    //string descripcioncategoria= modelo.categoriaautor.IdCategoriaNavigation.Descripcion; 
-                    TempData["error102"] = "Ya cuenta con esta Asingacion:" ;
-                    return View(modelo);
+                    // Ocurrió un error al eliminar la película
+                    var errorMessage = "Ya cuenta con esta Asignacion";
+
+                    var model = new ErrorViewModel
+                    {
+                        ErrorMessage = errorMessage,
+                        asp_action = "Index",
+                        asp_controller = "CategoriaAutor"
+
+
+
+                    };
+
+                    return View("Error", model);
                 }
-               
-              
-              
-              
+
+
+
+
             }
             else
             {
@@ -136,12 +146,24 @@ namespace AppPeliculas.Controllers
                     _context.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
-                catch
+                catch (Exception ex)
                 {
-                    TempData["error102"] = "Ya cuenta con esta Asingacion:";
-                    return View(modelo);
+                    // Ocurrió un error al eliminar la película
+                    var errorMessage = "Ya cuenta con esta Asignacion";
+
+                    var model = new ErrorViewModel
+                    {
+                        ErrorMessage = errorMessage,
+                        asp_action = "Index",
+                        asp_controller = "CategoriaAutor"
+
+
+
+                    };
+
+                    return View("Error", model);
                 }
-              
+
 
 
             }
