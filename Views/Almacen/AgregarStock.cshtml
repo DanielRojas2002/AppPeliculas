@@ -4,5 +4,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@model Almacen
 <h1>AgregarStock</h1>
 
+<form class="form-control" asp-action="AgregarStock" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                
+               
+                <input asp-for="IdPelicula" class="form-control" hidden />
+                
+
+
+
+            </div>
+
+
+            <div class="form-group mt-3">
+
+                <label asp-for="Cantidad" class="control-label"></label>
+                <input asp-for="Cantidad" class="form-control" type="number" />   
+                <span asp-validation-for="Cantidad" class="text-danger"></span>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="d-flex justify-content-start mt-3">
+                <a asp-action="Regresar" asp-route-idpelicula="@Model.IdPelicula" class="btn btn-success w-50 m-2">Regresar</a>
+
+               
+                <button type="submit" class="btn btn-primary  w-50  m-2 ">Agregar Stock</button>
+               
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+</form>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+
+
+
+    }
+
+
+}

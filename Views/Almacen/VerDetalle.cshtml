@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewData["Title"] = "VerDetalle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>VerDetalle</h1>
+
+@model List<Almacen>
+
+<table class="table ">
+    <tr>
+
+
+        <th>
+            Id Almacen
+        </th>
+
+        <th>
+            Stock Agregado
+        </th>
+
+        <th>
+            Fecha Registro
+        </th>
+
+        <th>
+            Tipo Entrada
+        </th>
+
+
+
+       
+
+    </tr>
+
+    @foreach (var almacen in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(m=>almacen.IdAlmacen  )
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>almacen.Cantidad  )
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>almacen.FechaRegistro )
+            </td>
+
+            <td>
+                @Html.DisplayFor(m=>almacen.IdTipoEntradaNavigation.Descripcion  )
+            </td>
+
+
+         
+
+
+        </tr>
+
+    }
+</table>
+
+<a asp-action="Regresar" asp-route-idpelicula="@TempData["idpelicula"]" class="btn btn-success">Regresar</a>

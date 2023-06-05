@@ -25,7 +25,65 @@ namespace AppPeliculas.Controllers
         public IActionResult AgregarStock(int idpelicula)
         {
             // solo se va a poder agregar y eliminar no modificar
-            return View();
+            Almacen almacen = new Almacen()
+            {
+                IdPelicula= idpelicula
+            };
+            return View(almacen);
+        }
+
+        [HttpPost]
+        public IActionResult AgregarStock(Almacen modelo)
+        {
+            Almacen al = new Almacen()
+            {
+                IdPelicula = modelo.IdPelicula,
+                IdTipoEntrada = 1,
+                Cantidad = modelo.Cantidad,
+                FechaRegistro = DateTime.Now
+            };
+
+            if (modelo.Cantidad>0)
+            {
+                _context.Almacens.Add(al);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index), new { idpelicula = modelo.IdPelicula });
+            }
+            else
+            {
+                var errorMessage = "Debe de agregar al menos 1 de stock";
+
+                var model = new ErrorViewModel
+                {
+                    ErrorMessage = errorMessage,
+                    asp_action = "Index",
+                    asp_controller = "Almacen",
+                    parametro = modelo.IdPelicula
+
+                };
+
+                return View("Error", model);
+            }
+           
+              
+           
+            
+          
+        }
+
+        public IActionResult VerDetalle(int idalmacen,int idpelicula)
+        {
+           
+
+            var objeto = _context.Almacens.Include(s => s.IdTipoEntradaNavigation).Where(m => m.IdAlmacen == idalmacen);
+            TempData["idpelicula"] = idpelicula;
+            return View(objeto.ToList());
+        }
+
+        public IActionResult Regresar(int idpelicula)
+        {
+            return RedirectToAction("Index", "Almacen", new { idpelicula = idpelicula });
+
         }
     }
 }
