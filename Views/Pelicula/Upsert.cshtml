@@ -31,7 +31,8 @@ else
             </div>
 
             <div class="form-group">
-                <label asp-for="pelicula.Imagen" class="control-label"></label>            
+                <label asp-for="pelicula.Imagen" class="control-label"></label>     
+                <input asp-for="pelicula.Imagen" class="form-control" hidden />
                 <input type="file" name="files" id="imagenId" class="form-control" />
                 <span asp-validation-for="pelicula.Imagen" class="text-danger"></span>
             </div>
@@ -99,11 +100,14 @@ else
         </div>
 
         <div class="col-md-6">
-            @if (Model.pelicula.IdPelicula != 0)
-            {
+            <div class="d-flex justify-content-center">
+                @if (Model.pelicula.IdPelicula != 0)
+                {
 
-                <img src="@WcRuta.ImgRuta@Model.pelicula.Imagen" width="100%" style="border-radius:5px solid " />
-            }
+                    <img src="@WcRuta.ImgRuta@Model.pelicula.Imagen" class="img-fluid w-50 h-50" />
+                }
+            </div>
+           
         </div>
 
     </div>

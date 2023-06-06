@@ -83,11 +83,14 @@
         </div>
 
         <div class="col-md-6">
-            @if (Model.pelicula.IdPelicula != 0)
-            {
+            <div class="d-flex justify-content-center">
+                @if (Model.pelicula.IdPelicula != 0)
+                {
 
-                <img src="@WcRuta.ImgRuta@Model.pelicula.Imagen" width="100%" style="border-radius:5px solid " />
-            }
+                    <img src="@WcRuta.ImgRuta@Model.pelicula.Imagen" class="img-fluid w-50 h-50" />
+                }
+            </div>
+
         </div>
     </div>
 

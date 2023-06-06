@@ -79,8 +79,6 @@ namespace AppPeliculas.Controllers
             if (modelo.pelicula.IdPelicula == 0)
             {
 
-
-
                 if (files.Count>0)
                 {
 
@@ -126,17 +124,6 @@ namespace AppPeliculas.Controllers
 
                     return View("Error", model);
                 }
-
-
-
-
-
-
-              
-
-               
-
-
 
 
 
@@ -186,6 +173,8 @@ namespace AppPeliculas.Controllers
                 }
                 else
                 {
+                    var objproducto = _context.Peliculas.AsNoTracking().FirstOrDefault(p => p.IdPelicula == modelo.pelicula.IdPelicula);
+
                     Pelicula pelicula = new Pelicula()
                     {
                         IdPelicula = modelo.pelicula.IdPelicula,
@@ -194,8 +183,8 @@ namespace AppPeliculas.Controllers
                         Titulo = modelo.pelicula.Titulo.ToUpper(),
                         Descripcion = modelo.pelicula.Descripcion.ToLower(),
                         Duracion = modelo.pelicula.Duracion,
-                        FechaRegistro = modelo.pelicula.FechaRegistro
-
+                        FechaRegistro = modelo.pelicula.FechaRegistro,
+                        Imagen = objproducto.Imagen 
 
                     };
                     _context.Peliculas.Update(pelicula);
