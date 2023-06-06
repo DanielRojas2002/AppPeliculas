@@ -18,7 +18,21 @@ namespace AppPeliculas.Controllers
         public IActionResult Index(int idpelicula)
         {
             var datos=_context.Almacens.Include(m=>m.IdPeliculaNavigation).Include(m=>m.IdTipoEntradaNavigation).Where(p=>p.IdPelicula==idpelicula);
+
+            int cantidadentrada = _context.Almacens
+            .Where(almacen => almacen.IdPelicula == idpelicula && almacen.IdTipoEntrada == 1)
+            .Sum(almacen => almacen.Cantidad);
+
+            int cantidadsalida = _context.Almacens
+           .Where(almacen => almacen.IdPelicula == idpelicula && almacen.IdTipoEntrada==2)
+           .Sum(almacen => almacen.Cantidad);
+
+            int total = cantidadentrada - cantidadsalida;
+
             TempData["idpelicula"] = idpelicula;
+            TempData["cantidadentrada"] = cantidadentrada;
+            TempData["cantidadsalida"] = cantidadsalida;
+            TempData["cantidadstock"] = total;
             return View(datos.ToList());
         }
 
