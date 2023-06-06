@@ -79,13 +79,10 @@ namespace AppPeliculas.Controllers
             if (modelo.pelicula.IdPelicula == 0)
             {
 
-               
 
-                try
+
+                if (files.Count>0)
                 {
-
-
-
 
                     string upload = webRootPath + WcRuta.ImgRuta;
                     string fileName = Guid.NewGuid().ToString();// guardo el nomre de la imagen en filename
@@ -111,29 +108,33 @@ namespace AppPeliculas.Controllers
                     };
 
                     _context.Peliculas.Add(pelicula);
-
-
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch
+                else
                 {
-                    Pelicula pelicula = new Pelicula()
+                    var errorMessage = "Debe de seleccionar 1 imagen para la pelicula";
+
+                    var model = new ErrorViewModel
                     {
-                        IdCategoria = modelo.pelicula.IdCategoria,
-                        IdEstatusPelicula = modelo.pelicula.IdEstatusPelicula,
-                        Titulo = modelo.pelicula.Titulo.ToUpper(),
-                        Descripcion = modelo.pelicula.Descripcion.ToLower(),
-                        Duracion = modelo.pelicula.Duracion,
-                        FechaRegistro = DateTime.Now,
-                        Stock = 0
+                        ErrorMessage = errorMessage,
+                        asp_action = "Index",
+                        asp_controller = "Pelicula"
+
 
                     };
-                    _context.Peliculas.Add(pelicula);
 
-
+                    return View("Error", model);
                 }
 
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+
+
+
+
+
+              
+
+               
 
 
 
@@ -243,6 +244,7 @@ namespace AppPeliculas.Controllers
                     IdPelicula = modelo.pelicula.IdPelicula
                 };
 
+                
                 string upload = _webHostEnviroment.WebRootPath + WcRuta.ImgRuta;
 
                 var objproducto = _context.Peliculas.AsNoTracking().FirstOrDefault(p => p.IdPelicula == modelo.pelicula.IdPelicula);
