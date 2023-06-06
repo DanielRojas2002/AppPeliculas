@@ -82,6 +82,13 @@
 
         </div>
 
+        <div class="col-md-6">
+            @if (Model.pelicula.IdPelicula != 0)
+            {
+
+                <img src="@WcRuta.ImgRuta@Model.pelicula.Imagen" width="100%" style="border-radius:5px solid " />
+            }
+        </div>
     </div>
 
     <div class="row">

@@ -13,6 +13,8 @@ public partial class Pelicula
 
     public string Titulo { get; set; } = null!;
 
+    public string? Imagen { get; set; }
+
     public string Descripcion { get; set; } = null!;
 
     public DateTime? FechaRegistro { get; set; }

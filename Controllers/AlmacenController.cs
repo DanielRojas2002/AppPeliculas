@@ -43,9 +43,27 @@ namespace AppPeliculas.Controllers
                 FechaRegistro = DateTime.Now
             };
 
-            if (modelo.Cantidad>0)
+            var stockactual = (from peli in _context.Peliculas
+                               where peli.IdPelicula == modelo.IdPelicula
+                               select peli.Stock).SingleOrDefault();
+
+
+
+
+
+
+            if (modelo.Cantidad > 0)
             {
                 _context.Almacens.Add(al);
+                _context.SaveChanges();
+
+                Pelicula pelicula = new Pelicula()
+                {
+                    IdPelicula = modelo.IdPelicula,
+                    Stock = modelo.Cantidad + stockactual
+                };
+
+                _context.Entry(pelicula).Property(x => x.Stock).IsModified = true;
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index), new { idpelicula = modelo.IdPelicula });
             }

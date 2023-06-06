@@ -3,6 +3,8 @@ using AppPeliculas.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
+using System;
 
 namespace AppPeliculas.Controllers
 {
@@ -10,10 +12,12 @@ namespace AppPeliculas.Controllers
     {
 
         private readonly DbpeliculasContext _context;
+        private readonly IWebHostEnvironment _webHostEnviroment;
 
-        public PeliculaController(DbpeliculasContext context)
+        public PeliculaController(DbpeliculasContext context, IWebHostEnvironment webHostEnviroment)
         {
             _context = context;
+            _webHostEnviroment = webHostEnviroment;
         }
 
 
@@ -67,47 +71,138 @@ namespace AppPeliculas.Controllers
         }
 
         [HttpPost]
-        public IActionResult Upsert(PeliculaVM modelo)
+        public async  Task<IActionResult> Upsert(PeliculaVM modelo)
         {
-            if (modelo.pelicula.IdPelicula==0)
+            var files = HttpContext.Request.Form.Files;
+            string webRootPath = _webHostEnviroment.WebRootPath; // acceso a la ruta
+
+            if (modelo.pelicula.IdPelicula == 0)
             {
+
                
 
-
-                Pelicula pelicula = new Pelicula()
+                try
                 {
-                    IdCategoria = modelo.pelicula.IdCategoria,
-                    IdEstatusPelicula = modelo.pelicula.IdEstatusPelicula,
-                    Titulo = modelo.pelicula.Titulo.ToUpper(),
-                    Descripcion = modelo.pelicula.Descripcion.ToLower(),
-                    Duracion = modelo.pelicula.Duracion,
-                    FechaRegistro= DateTime.Now
 
-                };
 
-                _context.Peliculas.Add(pelicula);
+
+
+                    string upload = webRootPath + WcRuta.ImgRuta;
+                    string fileName = Guid.NewGuid().ToString();// guardo el nomre de la imagen en filename
+                    string extension = Path.GetExtension(files[0].FileName); // accedo a la extension de la imagen 
+
+                    using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    {
+                        files[0].CopyTo(fileStream);
+                    }
+
+
+
+                    Pelicula pelicula = new Pelicula()
+                    {
+                        IdCategoria = modelo.pelicula.IdCategoria,
+                        IdEstatusPelicula = modelo.pelicula.IdEstatusPelicula,
+                        Titulo = modelo.pelicula.Titulo.ToUpper(),
+                        Descripcion = modelo.pelicula.Descripcion.ToLower(),
+                        Duracion = modelo.pelicula.Duracion,
+                        FechaRegistro = DateTime.Now,
+                        Stock = 0,
+                        Imagen = fileName + extension
+                    };
+
+                    _context.Peliculas.Add(pelicula);
+
+
+                }
+                catch
+                {
+                    Pelicula pelicula = new Pelicula()
+                    {
+                        IdCategoria = modelo.pelicula.IdCategoria,
+                        IdEstatusPelicula = modelo.pelicula.IdEstatusPelicula,
+                        Titulo = modelo.pelicula.Titulo.ToUpper(),
+                        Descripcion = modelo.pelicula.Descripcion.ToLower(),
+                        Duracion = modelo.pelicula.Duracion,
+                        FechaRegistro = DateTime.Now,
+                        Stock = 0
+
+                    };
+                    _context.Peliculas.Add(pelicula);
+
+
+                }
+
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
+
+
+
+
 
             }
             else
             {
                 //editar
 
-                Pelicula pelicula = new Pelicula()
+                // verifica si esta intenado agregar una nueva imagen
+                if (files.Count > 0)
                 {
-                    IdPelicula = modelo.pelicula.IdPelicula,
-                    IdCategoria = modelo.pelicula.IdCategoria,
-                    IdEstatusPelicula = modelo.pelicula.IdEstatusPelicula,
-                    Titulo = modelo.pelicula.Titulo.ToUpper(),
-                    Descripcion = modelo.pelicula.Descripcion.ToLower(),
-                    Duracion = modelo.pelicula.Duracion,
-                    FechaRegistro=modelo.pelicula.FechaRegistro
-                    
+                    string upload = webRootPath + WcRuta.ImgRuta;
+                    string fileName = Guid.NewGuid().ToString();// aguardo el nombre de la imagen
+                    string extension = Path.GetExtension(files[0].FileName); // guardo su extension
 
-                };
+                    // borrar img anterior
+                    var objproducto = _context.Peliculas.AsNoTracking().FirstOrDefault(p => p.IdPelicula == modelo.pelicula.IdPelicula);
 
-                _context.Peliculas.Update(pelicula);
+                    var anteriorfile = Path.Combine(upload, objproducto.Imagen);
+                    if (System.IO.File.Exists(anteriorfile))
+                    {
+                        System.IO.File.Delete(anteriorfile);
+                    }
+                    // imagen anterior borrada
+
+                    // guardo la nueva imagen
+                    using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    {
+                        files[0].CopyTo(fileStream);
+                    }
+
+                    Pelicula pelicula = new Pelicula()
+                    {
+                        IdPelicula = modelo.pelicula.IdPelicula,
+                        IdCategoria = modelo.pelicula.IdCategoria,
+                        IdEstatusPelicula = modelo.pelicula.IdEstatusPelicula,
+                        Titulo = modelo.pelicula.Titulo.ToUpper(),
+                        Descripcion = modelo.pelicula.Descripcion.ToLower(),
+                        Duracion = modelo.pelicula.Duracion,
+                        FechaRegistro = modelo.pelicula.FechaRegistro,
+                        Imagen = fileName + extension
+
+
+                    };
+
+                    _context.Peliculas.Update(pelicula);
+                }
+                else
+                {
+                    Pelicula pelicula = new Pelicula()
+                    {
+                        IdPelicula = modelo.pelicula.IdPelicula,
+                        IdCategoria = modelo.pelicula.IdCategoria,
+                        IdEstatusPelicula = modelo.pelicula.IdEstatusPelicula,
+                        Titulo = modelo.pelicula.Titulo.ToUpper(),
+                        Descripcion = modelo.pelicula.Descripcion.ToLower(),
+                        Duracion = modelo.pelicula.Duracion,
+                        FechaRegistro = modelo.pelicula.FechaRegistro
+
+
+                    };
+                    _context.Peliculas.Update(pelicula);
+                }
+
+               
+
+               
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
@@ -148,21 +243,34 @@ namespace AppPeliculas.Controllers
                     IdPelicula = modelo.pelicula.IdPelicula
                 };
 
+                string upload = _webHostEnviroment.WebRootPath + WcRuta.ImgRuta;
+
+                var objproducto = _context.Peliculas.AsNoTracking().FirstOrDefault(p => p.IdPelicula == modelo.pelicula.IdPelicula);
+                var anteriorfile = Path.Combine(upload, objproducto.Imagen);
+                if (System.IO.File.Exists(anteriorfile))
+                {
+                    System.IO.File.Delete(anteriorfile);
+                }
+
+                var almacenesAEliminar = _context.Almacens.Where(a => a.IdPelicula == modelo.pelicula.IdPelicula);
+                _context.Almacens.RemoveRange(almacenesAEliminar);
+
                 _context.Peliculas.Remove(pelicula);
+
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 // Ocurrió un error al eliminar la película
-                var errorMessage = "No se puede eliminar esta pelicula antes de eliminar todas las asignaciones de autores";
+                var errorMessage = "No se puede eliminar esta pelicula antes de eliminar todas las asignaciones ";
 
                 var model = new ErrorViewModel
                 {
                     ErrorMessage = errorMessage,
-                    asp_action="Index",
-                    asp_controller="Pelicula"
-                    
+                    asp_action = "Index",
+                    asp_controller = "Pelicula"
+
 
                 };
 
