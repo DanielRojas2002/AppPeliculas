@@ -13,7 +13,7 @@ namespace AppPeliculas.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int idusuario)
         {
             return View();
         }

@@ -1,7 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Error";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
 @model ErrorViewModel
@@ -10,33 +9,34 @@
 <html>
 <head>
     <!-- Encabezados y enlaces CSS -->
-    
+
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 </head>
 <body>
     <!-- Contenido de la página -->
-    <h1>Error</h1>
-    <p>@Model.ErrorMessage</p>
-    @if (Model.parametro>0)
+    <h1 class="text-black">Error</h1>
+    <p class="text-danger">@Model.ErrorMessage</p>
+    @if (Model.parametro > 0)
     {
         <a asp-action="@Model.asp_action" asp-controller="@Model.asp_controller" asp-route-idpelicula="@Model.parametro" class="btn btn-primary">Regresar</a>
     }
-    else{
-        <a asp-action="@Model.asp_action" asp-controller="@Model.asp_controller"  class="btn btn-primary">Regresar</a>
+    else
+    {
+        <a asp-action="@Model.asp_action" asp-controller="@Model.asp_controller" class="btn btn-primary">Regresar</a>
     }
-   
+
 
     <script>
         // Código de SweetAlert para mostrar la notificación
-       
+
         swal({
             title: 'Error',
             text: '@Model.ErrorMessage',
             icon: 'error',
             button: 'Aceptar'
         });
-       
+
     </script>
 
     <!-- Otros scripts y enlaces JS -->

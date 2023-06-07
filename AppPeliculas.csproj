@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Imagenes\**" />
+    <Content Remove="Imagenes\**" />
+    <EmbeddedResource Remove="Imagenes\**" />
+    <None Remove="Imagenes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
@@ -16,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Imagenes\" />
     <Folder Include="wwwroot\img\peliculas\" />
+    <Folder Include="wwwroot\imgsistema\" />
   </ItemGroup>
 
 </Project>

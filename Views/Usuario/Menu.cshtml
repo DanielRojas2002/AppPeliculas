@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "Menu";
+    Layout = "~/Views/Shared/_layoutusuario.cshtml";
+}
+
+<h1>Menu</h1>
+
+@model List<Pelicula>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+
+        
+        @foreach (var pelicula in Model)
+        {
+            <div class="row">
+
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <img src="@WcRuta.ImgRuta@pelicula.Imagen" class="card-img-top h-100 w-50" alt="@pelicula.IdPelicula" >
+                        <div class="card-body">
+                            <h5 class="card-title"> @Html.DisplayFor(m=>pelicula.Titulo  )</h5>
+                            <h6 class="card-title"> @Html.DisplayFor(m=>pelicula.IdCategoriaNavigation.Descripcion  )</h6>
+                            <h6 class="card-title">Stock Disponible: @Html.DisplayFor(m=>pelicula.Stock  )</h6>
+                            <p class="card-text">@Html.DisplayFor(m=>pelicula.Descripcion  )</p>
+                            <a asp-action="Carrito" asp-controller="Usuario" asp-route-idusuario="@TempData["idusuario"]" asp-route-idpelicula="@pelicula.IdPelicula" class="btn btn-primary">Agregar al Carrito</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+                   
+
+        }
+
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,39 +1,35 @@
 ﻿using AppPeliculas.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AppPeliculas.Controllers
 {
-    public class UsuarioController : Controller
+    public class AdminController : Controller
     {
 
         private readonly DbpeliculasContext _context;
 
-        public UsuarioController(DbpeliculasContext context)
+        public AdminController(DbpeliculasContext context)
         {
             _context = context;
         }
-
-
 
         public IActionResult Index()
         {
             return View();
         }
 
-
         [HttpPost]
         public IActionResult Index(Usuario modelo)
         {
-           
+
 
             int idusuario = (from usu in _context.Usuarios
-                               where usu.Correo == modelo.Correo  && usu.Contrasena == modelo.Contrasena && usu.IdTipoUsuario == 1
+                             where usu.Correo == modelo.Correo && usu.Contrasena == modelo.Contrasena && usu.IdTipoUsuario==2
                              select usu.IdUsuario).SingleOrDefault();
 
-            if (idusuario>0)
+            if (idusuario > 0)
             {
-                return RedirectToAction(nameof(Menu),new {idusuario=idusuario});
+                return RedirectToAction("Index", "Home", new { idusuario = idusuario }); 
             }
             else
             {
@@ -43,20 +39,13 @@ namespace AppPeliculas.Controllers
                 {
                     ErrorMessage = errorMessage,
                     asp_action = "Index",
-                    asp_controller = "Usuario"
+                    asp_controller = "Admin"
 
                 };
 
                 return View("Error", model);
             }
-            
-        }
 
-        public IActionResult Menu(int idusuario)
-        {
-            TempData["idusuario"] = idusuario;
-            var peliculas = _context.Peliculas.Include(m=>m.IdCategoriaNavigation).Where(a=>a.Stock>0 && a.IdEstatusPelicula==1).ToList();
-            return View(peliculas);
         }
     }
 }
