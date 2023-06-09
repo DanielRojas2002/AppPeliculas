@@ -85,6 +85,7 @@ public partial class DbpeliculasContext : DbContext
 
             entity.ToTable("CARRITO");
 
+            entity.Property(e => e.FechaPedido).HasColumnType("datetime");
             entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Carritos)
@@ -103,6 +104,11 @@ public partial class DbpeliculasContext : DbContext
                 .HasForeignKey(d => d.IdCarrito)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CarritoDetalle_Carrito");
+
+            entity.HasOne(d => d.IdPeliculaNavigation).WithMany(p => p.CarritoDetalles)
+                .HasForeignKey(d => d.IdPelicula)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CarritoDetalle_Pelicula");
         });
 
         modelBuilder.Entity<CategoriaAutor>(entity =>

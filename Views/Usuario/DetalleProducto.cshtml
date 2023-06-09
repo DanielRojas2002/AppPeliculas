@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "DetalleProducto";
     Layout = "~/Views/Shared/_layoutusuario.cshtml";
+   
 }
 
 @model AppPeliculas.Models.ViewModels.PeliculaCarrito
@@ -31,19 +32,20 @@
                         <div class="d-flex flex-column justify-content-center bg-danger m-3">
                             <div class="d-flex flex-column">
                                 <div class="mb-auto">
-                                    <input asp-for="usuario.IdUsuario" class="form-control" disabled   hidden/>
-                                    <input asp-for="pelicula.IdPelicula" class="form-control" disabled hidden />
+                                    <input asp-for="usuario.IdUsuario" class="form-control"    hidden/>
+                                    <input asp-for="pelicula.IdPelicula" class="form-control"  hidden />
                                     
 
                                     <input asp-for="pelicula.Titulo" class="form-control" disabled />
                                     <input asp-for="pelicula.Descripcion" class="form-control" disabled  />
                                     <div class="d-flex justify-content-around">
                                         <input asp-for="pelicula.IdCategoriaNavigation.Descripcion" class="form-control" disabled />
-                                        <input asp-for="pelicula.Stock" class="form-control" disabled />
+                                        <input asp-for="pelicula.Stock" class="form-control"  disabled />
                                     </div>
                                 </div>
                                 <div class="mt-auto">
-                                    <input asp-for="carritodetalle.Stock" type="number" class="form-control" />
+                                    
+                                    <input asp-for="carritodetalle.Stock" type="number" min="1" class="form-control" value="1"  />
                                     <button type="submit" class="btn btn-primary  w-50  m-2 ">Agregar al Carrito</button>
 
                                   

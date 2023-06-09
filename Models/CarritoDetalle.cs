@@ -14,4 +14,6 @@ public partial class CarritoDetalle
     public int Stock { get; set; }
 
     public virtual Carrito IdCarritoNavigation { get; set; } = null!;
+
+    public virtual Pelicula IdPeliculaNavigation { get; set; } = null!;
 }

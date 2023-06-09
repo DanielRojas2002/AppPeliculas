@@ -25,6 +25,8 @@ public partial class Pelicula
 
     public virtual ICollection<Almacen> Almacens { get; set; } = new List<Almacen>();
 
+    public virtual ICollection<CarritoDetalle> CarritoDetalles { get; set; } = new List<CarritoDetalle>();
+
     public virtual Categorium IdCategoriaNavigation { get; set; } = null!;
 
     public virtual EstatusPelicula IdEstatusPeliculaNavigation { get; set; } = null!;

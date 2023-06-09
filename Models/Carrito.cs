@@ -11,7 +11,7 @@ public partial class Carrito
 
     public DateTime FechaRegistro { get; set; }
 
-    public TimeSpan HoraPedido { get; set; }
+    public DateTime? FechaPedido { get; set; }
 
     public virtual ICollection<CarritoDetalle> CarritoDetalles { get; set; } = new List<CarritoDetalle>();
 

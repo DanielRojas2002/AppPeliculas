@@ -17,15 +17,26 @@
     <!-- Contenido de la página -->
     <h1 class="text-black">Error</h1>
     <p class="text-danger">@Model.ErrorMessage</p>
-    @if (Model.parametro > 0)
+
+    @if (Model.parametro2 > 0)
     {
-        <a asp-action="@Model.asp_action" asp-controller="@Model.asp_controller" asp-route-idpelicula="@Model.parametro" class="btn btn-primary">Regresar</a>
+    <a asp-action="@Model.asp_action" asp-controller="@Model.asp_controller" asp-route-idusuario="@Model.parametro2" class="btn btn-primary">Regresar</a>
     }
-    else
-    {
-        <a asp-action="@Model.asp_action" asp-controller="@Model.asp_controller" class="btn btn-primary">Regresar</a>
+    else{
+        @if (Model.parametro > 0)
+        {
+            <a asp-action="@Model.asp_action" asp-controller="@Model.asp_controller" asp-route-idpelicula="@Model.parametro" class="btn btn-primary">Regresar</a>
+        }
+
+        else
+        {
+            <a asp-action="@Model.asp_action" asp-controller="@Model.asp_controller" class="btn btn-primary">Regresar</a>
+        }
     }
 
+   
+
+   
 
     <script>
         // Código de SweetAlert para mostrar la notificación

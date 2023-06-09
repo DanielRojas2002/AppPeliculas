@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewData["Title"] = "Carrito";
+    Layout = "~/Views/Shared/_layoutusuario.cshtml";
+}
+
+
+
+
+@model List<List<CarritoDetalle>>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/prueba.css" />
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>Carrito</h1>
+
+        @foreach (var grupo in Model)
+        {
+            <div class="row">
+                @foreach (var pelicula in grupo)
+                {
+                    <div class="col-lg-4 ">
+                        <div class="card  h-50 border-4 ">
+                            <img src="@WcRuta.ImgRuta@pelicula.IdPeliculaNavigation.Imagen" class="card-img-top  image-fit-cover " alt="@pelicula.IdPelicula">
+                            <div class="card-body">
+                                <h5 class="card-title text-center"> @Html.DisplayFor(m => pelicula.IdPeliculaNavigation.Titulo)</h5>
+                                <p class="card-text">@Html.DisplayFor(m => pelicula.IdPeliculaNavigation.Descripcion)</p>
+                                <div class="d-flex justify-content-center">
+                                   
+                                    <h6 class="card-title text-success">Cantidad: @Html.DisplayFor(m => pelicula.Stock)</h6>
+
+                                </div>
+
+
+
+                                <a asp-action="QuitarPelicula" asp-controller="Usuario" asp-route-idusuario="@TempData["idusuario"]" asp-route-idcarritodetalle="@pelicula.IdCarritoDetalle" class="mt-3 btn btn-danger w-100">Quitar</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <div class=" row">
+            <a asp-action="Pagar" asp-controller="Usuario" asp-route-idusuario="@TempData["idusuario"]" asp-route-idcarrito="@TempData["idusuario"]" class="mt-3 btn btn-primary w-100">Finalizar Compra</a>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
