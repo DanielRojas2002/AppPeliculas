@@ -69,7 +69,7 @@ namespace AppPeliculas.Controllers
             if (modelo.Cantidad > 0)
             {
                 _context.Almacens.Add(al);
-                _context.SaveChanges();
+                
 
                 Pelicula pelicula = new Pelicula()
                 {
@@ -78,6 +78,9 @@ namespace AppPeliculas.Controllers
                 };
 
                 _context.Entry(pelicula).Property(x => x.Stock).IsModified = true;
+
+              
+
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index), new { idpelicula = modelo.IdPelicula });
             }

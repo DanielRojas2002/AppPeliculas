@@ -55,7 +55,15 @@ namespace AppPeliculas.Controllers
         public IActionResult Menu(int idusuario)
         {
             TempData["idusuario"] = idusuario;
-            var peliculas = _context.Peliculas.Include(m=>m.IdCategoriaNavigation).Where(a=>a.Stock>0 && a.IdEstatusPelicula==1).ToList();
+            var peliculas = _context.Peliculas
+            .Include(m => m.IdCategoriaNavigation)
+            .Where(a => a.Stock > 0 && a.IdEstatusPelicula == 1)
+            .ToList()
+            .Select((pelicula, indice) => new { Pelicula = pelicula, Indice = indice })
+            .GroupBy(x => x.Indice / 3)
+            .Select(g => g.Select(x => x.Pelicula).ToList()) // Convertir IEnumerable en List
+            .ToList();
+
             return View(peliculas);
         }
     }

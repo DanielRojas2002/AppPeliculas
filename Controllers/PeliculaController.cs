@@ -164,6 +164,7 @@ namespace AppPeliculas.Controllers
                         Descripcion = modelo.pelicula.Descripcion.ToLower(),
                         Duracion = modelo.pelicula.Duracion,
                         FechaRegistro = modelo.pelicula.FechaRegistro,
+                        Stock=modelo.pelicula.Stock,
                         Imagen = fileName + extension
 
 
@@ -184,6 +185,7 @@ namespace AppPeliculas.Controllers
                         Descripcion = modelo.pelicula.Descripcion.ToLower(),
                         Duracion = modelo.pelicula.Duracion,
                         FechaRegistro = modelo.pelicula.FechaRegistro,
+                        Stock = modelo.pelicula.Stock,
                         Imagen = objproducto.Imagen 
 
                     };
