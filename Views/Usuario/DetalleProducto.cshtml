@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = "DetalleProducto";
+    Layout = "~/Views/Shared/_layoutusuario.cshtml";
+}
+
+@model AppPeliculas.Models.ViewModels.PeliculaCarrito
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+    <title>Tarjeta centrada</title>
+    <link rel="stylesheet" href="~/css/prueba.css" />
+</head>
+<body>
+    <h1>DetalleProducto</h1>
+
+    <form class="form-control" asp-action="DetalleProducto" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="container row d-flex justify-content-around align-items-center">
+            <div class="card col-8">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <img src="@WcRuta.ImgRuta@TempData["rutaimagen"]" class="card-img-top image-fit-cover" alt="Imagen">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex flex-column justify-content-center bg-danger m-3">
+                            <div class="d-flex flex-column">
+                                <div class="mb-auto">
+                                    <input asp-for="usuario.IdUsuario" class="form-control" disabled   hidden/>
+                                    <input asp-for="pelicula.IdPelicula" class="form-control" disabled hidden />
+                                    
+
+                                    <input asp-for="pelicula.Titulo" class="form-control" disabled />
+                                    <input asp-for="pelicula.Descripcion" class="form-control" disabled  />
+                                    <div class="d-flex justify-content-around">
+                                        <input asp-for="pelicula.IdCategoriaNavigation.Descripcion" class="form-control" disabled />
+                                        <input asp-for="pelicula.Stock" class="form-control" disabled />
+                                    </div>
+                                </div>
+                                <div class="mt-auto">
+                                    <input asp-for="carritodetalle.Stock" type="number" class="form-control" />
+                                    <button type="submit" class="btn btn-primary  w-50  m-2 ">Agregar al Carrito</button>
+
+                                  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+
+
+
+    }
+
+
+}

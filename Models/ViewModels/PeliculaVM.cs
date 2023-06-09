@@ -9,5 +9,7 @@ namespace AppPeliculas.Models.ViewModels
         public IEnumerable<SelectListItem> ListaCateogoria  { get; set; }
 
         public IEnumerable<SelectListItem> ListaEstatus { get; set; }
+
+       
     }
 }
