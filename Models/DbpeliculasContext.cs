@@ -29,6 +29,8 @@ public partial class DbpeliculasContext : DbContext
 
     public virtual DbSet<EstatusPelicula> EstatusPeliculas { get; set; }
 
+    public virtual DbSet<Estatuscarrito> Estatuscarritos { get; set; }
+
     public virtual DbSet<Pelicula> Peliculas { get; set; }
 
     public virtual DbSet<PeliculaAutor> PeliculaAutors { get; set; }
@@ -39,9 +41,9 @@ public partial class DbpeliculasContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Server=DANIELROJAS; Database=DBPELICULAS; Trusted_Connection=True;  Encrypt=False ");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=DANIELROJAS; Database=DBPELICULAS; Trusted_Connection=True;  Encrypt=False ");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -87,6 +89,11 @@ public partial class DbpeliculasContext : DbContext
 
             entity.Property(e => e.FechaPedido).HasColumnType("datetime");
             entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+
+            entity.HasOne(d => d.IdEstatusNavigation).WithMany(p => p.Carritos)
+                .HasForeignKey(d => d.IdEstatus)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Carrito_Estatus");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Carritos)
                 .HasForeignKey(d => d.IdUsuario)
@@ -144,6 +151,15 @@ public partial class DbpeliculasContext : DbContext
             entity.HasKey(e => e.IdEstatusPelicula).HasName("PK_IdEstatusPelicula");
 
             entity.ToTable("ESTATUS_PELICULA");
+
+            entity.Property(e => e.Descripcion).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<Estatuscarrito>(entity =>
+        {
+            entity.HasKey(e => e.IdEstatus).HasName("PK_IdEstatus");
+
+            entity.ToTable("ESTATUSCARRITO");
 
             entity.Property(e => e.Descripcion).HasMaxLength(20);
         });

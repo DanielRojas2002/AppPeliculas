@@ -26,15 +26,15 @@ namespace AppPeliculas.Controllers
         [HttpPost]
         public IActionResult Index(Usuario modelo)
         {
-           
+
 
             int idusuario = (from usu in _context.Usuarios
-                               where usu.Correo == modelo.Correo  && usu.Contrasena == modelo.Contrasena && usu.IdTipoUsuario == 1
+                             where usu.Correo == modelo.Correo && usu.Contrasena == modelo.Contrasena && usu.IdTipoUsuario == 1
                              select usu.IdUsuario).SingleOrDefault();
 
-            if (idusuario>0)
+            if (idusuario > 0)
             {
-                return RedirectToAction(nameof(Menu),new {idusuario=idusuario});
+                return RedirectToAction(nameof(Menu), new { idusuario = idusuario });
             }
             else
             {
@@ -50,7 +50,7 @@ namespace AppPeliculas.Controllers
 
                 return View("Error", model);
             }
-            
+
         }
 
         public IActionResult Menu(int idusuario)
@@ -68,7 +68,7 @@ namespace AppPeliculas.Controllers
             return View(peliculas);
         }
 
-        public IActionResult DetalleProducto(int idusuario,int idpelicula)
+        public IActionResult DetalleProducto(int idusuario, int idpelicula)
         {
 
 
@@ -79,9 +79,9 @@ namespace AppPeliculas.Controllers
                 carrito = new Carrito(),
                 usuario = new Usuario()
                 {
-                    IdUsuario=idusuario
+                    IdUsuario = idusuario
                 },
-                carritodetalle =new CarritoDetalle()
+                carritodetalle = new CarritoDetalle()
 
             };
 
@@ -105,16 +105,16 @@ namespace AppPeliculas.Controllers
             TempData["idusuario"] = modelo.usuario.IdUsuario;
 
             int? stockdisponible = (from peli in _context.Peliculas
-                         where peli.IdPelicula == modelo.pelicula.IdPelicula
-                         select peli.Stock).SingleOrDefault();
+                                    where peli.IdPelicula == modelo.pelicula.IdPelicula
+                                    select peli.Stock).SingleOrDefault();
 
-            if (stockdisponible>modelo.carritodetalle.Stock)
+            if (stockdisponible > modelo.carritodetalle.Stock)
             {
                 int idcarrito = 0;
                 try
                 {
                     idcarrito = (from carritoo in _context.Carritos
-                                 where carritoo.IdUsuario == modelo.usuario.IdUsuario
+                                 where carritoo.IdUsuario == modelo.usuario.IdUsuario && carritoo.IdEstatus==1
                                  select carritoo.IdCarrito).SingleOrDefault();
                 }
                 catch
@@ -131,22 +131,13 @@ namespace AppPeliculas.Controllers
                         IdCarrito = idcarrito,
                         IdPelicula = modelo.pelicula.IdPelicula,
                         Stock = modelo.carritodetalle.Stock
+                        
                     };
 
                     _context.CarritoDetalles.Add(carritoDetalle);
                     _context.SaveChanges();
 
 
-                    //Almacen al = new Almacen()
-                    //{
-                    //    IdPelicula = modelo.pelicula.IdPelicula,
-                    //    IdTipoEntrada = 2,
-                    //    Cantidad = modelo.carritodetalle.Stock,
-                    //    FechaRegistro = DateTime.Now
-                    //};
-
-                    //_context.Almacens.Add(al);
-                    //_context.SaveChanges();
 
                     var stockactual = (from peli in _context.Peliculas
                                        where peli.IdPelicula == modelo.pelicula.IdPelicula
@@ -169,7 +160,8 @@ namespace AppPeliculas.Controllers
                     Carrito carrito = new Carrito()
                     {
                         FechaRegistro = DateTime.Now,
-                        IdUsuario = modelo.usuario.IdUsuario
+                        IdUsuario = modelo.usuario.IdUsuario,
+                        IdEstatus=1
 
 
                     };
@@ -178,7 +170,7 @@ namespace AppPeliculas.Controllers
                     _context.SaveChanges();
 
                     idcarrito = (from carritoo in _context.Carritos
-                                 where carritoo.IdUsuario == modelo.usuario.IdUsuario
+                                 where carritoo.IdUsuario == modelo.usuario.IdUsuario && carritoo.IdEstatus == 1
                                  select carritoo.IdCarrito).SingleOrDefault();
 
                     CarritoDetalle carritoDetalle = new CarritoDetalle()
@@ -191,16 +183,7 @@ namespace AppPeliculas.Controllers
                     _context.CarritoDetalles.Add(carritoDetalle);
                     _context.SaveChanges();
 
-                    //Almacen al = new Almacen()
-                    //{
-                    //    IdPelicula = modelo.pelicula.IdPelicula,
-                    //    IdTipoEntrada = 2,
-                    //    Cantidad = modelo.carritodetalle.Stock,
-                    //    FechaRegistro = DateTime.Now
-                    //};
-
-                    //_context.Almacens.Add(al);
-                    //_context.SaveChanges();
+                   
 
 
                     var stockactual = (from peli in _context.Peliculas
@@ -230,13 +213,13 @@ namespace AppPeliculas.Controllers
                     ErrorMessage = errorMessage,
                     asp_action = "Menu",
                     asp_controller = "Usuario",
-                    parametro2=modelo.usuario.IdUsuario
+                    parametro2 = modelo.usuario.IdUsuario
 
                 };
 
                 return View("Error", model);
             }
-          
+
 
 
             return RedirectToAction(nameof(Menu), new { idusuario = modelo.usuario.IdUsuario });
@@ -244,24 +227,61 @@ namespace AppPeliculas.Controllers
         }
 
 
-        public IActionResult Carrito (int idusuario)
+        public IActionResult Carrito(int idusuario)
         {
 
             TempData["idusuario"] = idusuario;
 
+
+            int idcarrito = (from carrito in _context.Carritos
+                             where carrito.IdUsuario == idusuario && carrito.IdEstatus==1
+                             select carrito.IdCarrito).SingleOrDefault();
+
+            TempData["idcarrito"] = idcarrito;
+
+
+
             var carritodetalle = _context.CarritoDetalles
-            .Include(m => m.IdCarritoNavigation).Include(p=>p.IdPeliculaNavigation)
-            .Where(a => a.IdCarritoNavigation.IdUsuario == idusuario)
+            .Include(m => m.IdCarritoNavigation).Include(p => p.IdPeliculaNavigation)
+            .Where(a => a.IdCarritoNavigation.IdUsuario == idusuario  && a.IdCarritoNavigation.IdEstatus==1)
             .ToList()
             .Select((carritodetalle, indice) => new { CarritoDetalle = carritodetalle, Indice = indice })
             .GroupBy(x => x.Indice / 3)
             .Select(g => g.Select(x => x.CarritoDetalle).ToList()) // Convertir IEnumerable en List
             .ToList();
 
-           
+
 
             return View(carritodetalle);
-            
+
+        }
+
+        public IActionResult Pedidos(int idusuario)
+        {
+
+
+            TempData["idusuario"] = idusuario;
+
+
+
+
+        
+
+
+
+            var carritodetalle = _context.CarritoDetalles
+            .Include(m => m.IdCarritoNavigation).Include(p => p.IdPeliculaNavigation)
+            .Where(a => a.IdCarritoNavigation.IdUsuario == idusuario && a.IdCarritoNavigation.IdEstatus == 2)
+            .ToList()
+            .Select((carritodetalle, indice) => new { CarritoDetalle = carritodetalle, Indice = indice })
+            .GroupBy(x => x.Indice / 2)
+            .Select(g => g.Select(x => x.CarritoDetalle).ToList()) // Convertir IEnumerable en List
+            .ToList();
+
+
+
+            return View(carritodetalle);
+
         }
 
 
@@ -269,16 +289,16 @@ namespace AppPeliculas.Controllers
         {
             CarritoDetalle carritoDetalle = new CarritoDetalle()
             {
-                IdCarritoDetalle=idcarritodetalle
+                IdCarritoDetalle = idcarritodetalle
             };
 
             int stockdevolver = (from carritodetalle in _context.CarritoDetalles
-                             where carritodetalle.IdCarritoDetalle == idcarritodetalle
-                             select carritodetalle.Stock).SingleOrDefault();
+                                 where carritodetalle.IdCarritoDetalle == idcarritodetalle
+                                 select carritodetalle.Stock).SingleOrDefault();
 
             int idpelicula = (from carritodetalle in _context.CarritoDetalles
-                                 where carritodetalle.IdCarritoDetalle == idcarritodetalle
-                                 select carritodetalle.IdPelicula).SingleOrDefault();
+                              where carritodetalle.IdCarritoDetalle == idcarritodetalle
+                              select carritodetalle.IdPelicula).SingleOrDefault();
 
             int? stockactual = (from peli in _context.Peliculas
                                 where peli.IdPelicula == idpelicula
@@ -294,7 +314,7 @@ namespace AppPeliculas.Controllers
             _context.SaveChanges();
 
 
-            
+
 
             Pelicula pelicula = new Pelicula()
             {
@@ -306,9 +326,56 @@ namespace AppPeliculas.Controllers
             _context.Entry(pelicula).Property(x => x.Stock).IsModified = true;
             _context.SaveChanges();
 
-          
+
 
             return RedirectToAction(nameof(Carrito), new { idusuario = idusuario });
+        }
+
+
+        public IActionResult Pagar(int idusuario, int idcarrito)
+        {
+
+          
+
+            List<CarritoDetalle> carritoDetalles = _context.CarritoDetalles.Where(p => p.IdCarrito == idcarrito).ToList();
+
+
+            
+
+
+            foreach (var person in carritoDetalles)
+            {
+                // Hacer algo con cada persona, por ejemplo, agregarla a una lista de resultados
+                // o mostrar sus propiedades en la vista
+
+                Almacen al = new Almacen()
+                {
+                    IdPelicula = person.IdPelicula,
+                    IdTipoEntrada = 2,
+                    Cantidad = person.Stock,
+                    FechaRegistro = DateTime.Now
+                };
+
+                _context.Almacens.Add(al);
+                _context.SaveChanges();
+
+
+
+            }
+
+            Carrito carrito = new Carrito()
+            {
+                IdCarrito=idcarrito,
+                IdEstatus=2,
+                FechaPedido=DateTime.Now
+            };
+
+            _context.Entry(carrito).Property(x => x.IdEstatus).IsModified = true;
+            _context.Entry(carrito).Property(x => x.FechaPedido).IsModified = true;
+            _context.SaveChanges();
+
+
+            return RedirectToAction(nameof(Menu), new { idusuario = idusuario });
         }
     }
 }

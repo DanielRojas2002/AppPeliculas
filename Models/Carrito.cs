@@ -13,7 +13,11 @@ public partial class Carrito
 
     public DateTime? FechaPedido { get; set; }
 
+    public int IdEstatus { get; set; }
+
     public virtual ICollection<CarritoDetalle> CarritoDetalles { get; set; } = new List<CarritoDetalle>();
+
+    public virtual Estatuscarrito IdEstatusNavigation { get; set; } = null!;
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }
